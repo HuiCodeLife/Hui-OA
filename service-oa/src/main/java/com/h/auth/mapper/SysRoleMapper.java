@@ -1,4 +1,4 @@
-package com.h.mapper;
+package com.h.auth.mapper;
 
 import com.baomidou.mybatisplus.core.mapper.BaseMapper;
 import com.h.model.system.SysRole;

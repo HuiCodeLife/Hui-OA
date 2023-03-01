@@ -1,4 +1,4 @@
-package com.h.service;
+package com.h.auth.service;
 
 import com.baomidou.mybatisplus.extension.service.IService;
 import com.h.model.system.SysRole;

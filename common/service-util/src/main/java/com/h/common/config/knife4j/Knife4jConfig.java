@@ -18,6 +18,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 /**
+ * Knife4j相关配置
  * @author: Lin
  * @since: 2023-03-01
  */
