@@ -12,5 +12,10 @@ import com.h.model.system.SysUser;
  * @since 2023-03-04
  */
 public interface SysUserService extends IService<SysUser> {
-
+    /**
+     * 更改用户状态
+     * @param id 用户id
+     * @param status 状态
+     */
+    void updateStatus(Long id, Integer status);
 }

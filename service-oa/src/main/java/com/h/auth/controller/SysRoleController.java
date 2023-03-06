@@ -6,6 +6,7 @@ import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import com.h.auth.service.SysRoleService;
 import com.h.common.result.Result;
 import com.h.model.system.SysRole;
+import com.h.vo.system.AssginRoleVo;
 import com.h.vo.system.SysRoleQueryVo;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
@@ -14,6 +15,7 @@ import org.springframework.web.bind.annotation.*;
 
 import javax.annotation.Resource;
 import java.util.List;
+import java.util.Map;
 
 /**
  * @author: Lin
@@ -28,6 +30,10 @@ public class SysRoleController {
     @Resource
     private SysRoleService sysRoleService;
 
+    /**
+     * 查询所有角色
+     * @return
+     */
     @ApiOperation("查询所有角色")
     @GetMapping("/findAll")
     public Result<List<SysRole>> findAll() {
@@ -40,7 +46,7 @@ public class SysRoleController {
      * 分页查询
      * @param page 当前页码数
      * @param limit 每页大小
-     * @param sysRoleQueryVo 条件
+     * @param sysRoleQueryVo 筛选条件
      * @return
      */
     @ApiOperation("条件分页查询")
@@ -64,6 +70,11 @@ public class SysRoleController {
         return Result.ok(pageModel);
     }
 
+    /**
+     * 根据角色id获取角色
+     * @param id 角色id
+     * @return 结果
+     */
     @ApiOperation(value = "获取")
     @GetMapping("/get/{id}")
     public Result get(@PathVariable Long id) {
@@ -71,6 +82,11 @@ public class SysRoleController {
         return Result.ok(role);
     }
 
+    /**
+     * 新增用户
+     * @param role 用户信息
+     * @return 结果
+     */
     @ApiOperation(value = "新增角色")
     @PostMapping("/save")
     public Result save(@RequestBody SysRole role) {
@@ -78,6 +94,11 @@ public class SysRoleController {
         return Result.ok();
     }
 
+    /**
+     * 修改角色
+     * @param role 角色
+     * @return 结果
+     */
     @ApiOperation(value = "修改角色")
     @PutMapping("/update")
     public Result updateById(@RequestBody SysRole role) {
@@ -85,6 +106,11 @@ public class SysRoleController {
         return Result.ok();
     }
 
+    /**
+     * 删除角色
+     * @param id 角色id
+     * @return 结果
+     */
     @ApiOperation(value = "删除角色")
     @DeleteMapping("/remove/{id}")
     public Result remove(@PathVariable Long id) {
@@ -92,10 +118,40 @@ public class SysRoleController {
         return Result.ok();
     }
 
+    /**
+     * 根据id批量删除
+     * @param idList id集合
+     * @return 结果
+     */
     @ApiOperation(value = "根据id列表删除")
     @DeleteMapping("/batchRemove")
     public Result batchRemove(@RequestBody List<Long> idList) {
         sysRoleService.removeByIds(idList);
+        return Result.ok();
+    }
+
+
+    /**
+     * 根据用户获取角色数据
+     * @param userId 用户id
+     * @return 结果
+     */
+    @ApiOperation(value = "根据用户获取角色数据")
+    @GetMapping("/toAssign/{userId}")
+    public Result toAssign(@PathVariable Long userId) {
+        Map<String, Object> roleMap = sysRoleService.findRoleByUserId(userId);
+        return Result.ok(roleMap);
+    }
+
+    /**
+     * 分配角色
+     * @param assginRoleVo
+     * @return
+     */
+    @ApiOperation(value = "用户分配角色")
+    @PostMapping("/doAssign")
+    public Result doAssign(@RequestBody AssginRoleVo assginRoleVo) {
+        sysRoleService.doAssign(assginRoleVo);
         return Result.ok();
     }
 

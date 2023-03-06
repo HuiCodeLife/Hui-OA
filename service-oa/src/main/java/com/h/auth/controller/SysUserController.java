@@ -28,9 +28,15 @@ import org.springframework.web.bind.annotation.*;
 public class SysUserController {
 
     @Autowired
-    private SysUserService service;
+    private SysUserService sysUserService;
 
-    //用户条件分页查询
+    /**
+     * 用户条件分页查询
+     * @param page 当前页码
+     * @param limit 每页大小
+     * @param sysUserQueryVo 筛选条件
+     * @return 结果
+     */
     @ApiOperation("用户条件分页查询")
     @GetMapping("{page}/{limit}")
     public Result index(@PathVariable Long page,
@@ -60,35 +66,68 @@ public class SysUserController {
         }
 
         //调用mp的方法实现条件分页查询
-        IPage<SysUser> pageModel = service.page(pageParam, wrapper);
+        IPage<SysUser> pageModel = sysUserService.page(pageParam, wrapper);
         return Result.ok(pageModel);
     }
 
+    /**
+     * 通过id查询用户
+     * @param id 用户id
+     * @return 结果
+     */
     @ApiOperation(value = "获取用户")
     @GetMapping("get/{id}")
     public Result get(@PathVariable Long id) {
-        SysUser user = service.getById(id);
+        SysUser user = sysUserService.getById(id);
         return Result.ok(user);
     }
 
+    /**
+     * 保存用户
+     * @param user 用户数据
+     * @return 结果
+     */
     @ApiOperation(value = "保存用户")
     @PostMapping("save")
     public Result save(@RequestBody SysUser user) {
-        service.save(user);
+        sysUserService.save(user);
         return Result.ok();
     }
 
+    /**
+     * 更新用户信息
+     * @param user 用户信息
+     * @return 结果
+     */
     @ApiOperation(value = "更新用户")
     @PutMapping("update")
     public Result updateById(@RequestBody SysUser user) {
-        service.updateById(user);
+        sysUserService.updateById(user);
         return Result.ok();
     }
 
+    /**
+     * 根据id删除用户
+     * @param id 用户id
+     * @return 结果
+     */
     @ApiOperation(value = "删除用户")
     @DeleteMapping("remove/{id}")
     public Result remove(@PathVariable Long id) {
-        service.removeById(id);
+        sysUserService.removeById(id);
+        return Result.ok();
+    }
+
+    /**
+     * 更改用户状态
+     * @param id 用户id
+     * @param status 状态
+     * @return 结果
+     */
+    @ApiOperation(value = "更新状态")
+    @GetMapping("updateStatus/{id}/{status}")
+    public Result updateStatus(@PathVariable Long id, @PathVariable Integer status) {
+        sysUserService.updateStatus(id, status);
         return Result.ok();
     }
 }

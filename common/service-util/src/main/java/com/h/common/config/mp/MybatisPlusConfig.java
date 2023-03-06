@@ -6,6 +6,7 @@ import com.baomidou.mybatisplus.extension.plugins.MybatisPlusInterceptor;
 import com.baomidou.mybatisplus.extension.plugins.inner.PaginationInnerInterceptor;
 import org.mybatis.spring.annotation.MapperScan;
 import org.springframework.context.annotation.Bean;
+import org.springframework.context.annotation.ComponentScan;
 import org.springframework.context.annotation.Configuration;
 
 /**
@@ -14,6 +15,8 @@ import org.springframework.context.annotation.Configuration;
  * @since: 2023-03-01
  */
 @Configuration
+@ComponentScan("com.h")
+@MapperScan("com.h.*.mapper")
 public class MybatisPlusConfig {
 
     /**
