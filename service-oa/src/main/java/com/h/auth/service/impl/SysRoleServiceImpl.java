@@ -2,11 +2,11 @@ package com.h.auth.service.impl;
 
 import com.baomidou.mybatisplus.core.conditions.query.LambdaQueryWrapper;
 import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
-import com.h.auth.entity.SysUserRole;
 import com.h.auth.service.SysRoleService;
 import com.h.auth.mapper.SysRoleMapper;
 import com.h.auth.service.SysUserRoleService;
 import com.h.model.system.SysRole;
+import com.h.model.system.SysUserRole;
 import com.h.vo.system.AssginRoleVo;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -16,7 +16,6 @@ import org.springframework.util.StringUtils;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
-import java.util.stream.Collectors;
 
 /**
  * @author: Lin
@@ -36,6 +35,7 @@ public class SysRoleServiceImpl extends ServiceImpl<SysRoleMapper, SysRole> impl
         // 查询当前用户拥有的角色列表
         List<SysRole> existRoleList = baseMapper.selectRolesByUserId(userId);
 
+        // 封装返回数据
         Map<String, Object> roleMap = new HashMap<>(2);
         roleMap.put("assginRoleList", existRoleList);
         roleMap.put("allRolesList", allRolesList);
@@ -55,7 +55,7 @@ public class SysRoleServiceImpl extends ServiceImpl<SysRoleMapper, SysRole> impl
             if(StringUtils.isEmpty(roleId)) {
                 continue;
             }
-            // 保存关联关系
+            // 保存关联关系到数据库
             SysUserRole userRole = new SysUserRole();
             userRole.setUserId(assginRoleVo.getUserId());
             userRole.setRoleId(roleId);

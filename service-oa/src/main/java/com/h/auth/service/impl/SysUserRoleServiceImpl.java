@@ -1,9 +1,9 @@
 package com.h.auth.service.impl;
 
-import com.h.auth.entity.SysUserRole;
 import com.h.auth.mapper.SysUserRoleMapper;
 import com.h.auth.service.SysUserRoleService;
 import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
+import com.h.model.system.SysUserRole;
 import org.springframework.stereotype.Service;
 
 /**

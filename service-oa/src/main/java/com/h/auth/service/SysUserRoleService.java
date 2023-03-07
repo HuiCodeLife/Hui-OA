@@ -1,7 +1,7 @@
 package com.h.auth.service;
 
-import com.h.auth.entity.SysUserRole;
 import com.baomidou.mybatisplus.extension.service.IService;
+import com.h.model.system.SysUserRole;
 
 /**
  * <p>
