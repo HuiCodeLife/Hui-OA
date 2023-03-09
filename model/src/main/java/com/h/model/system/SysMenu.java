@@ -9,6 +9,9 @@ import lombok.Data;
 
 import java.util.List;
 
+/**
+ * @author Lin
+ */
 @Data
 @ApiModel(description = "菜单")
 @TableName("sys_menu")

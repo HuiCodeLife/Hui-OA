@@ -2,6 +2,9 @@ package com.h.auth.service;
 
 import com.baomidou.mybatisplus.extension.service.IService;
 import com.h.model.system.SysUser;
+import com.h.vo.system.LoginVo;
+
+import java.util.Map;
 
 /**
  * <p>
@@ -18,4 +21,12 @@ public interface SysUserService extends IService<SysUser> {
      * @param status 状态
      */
     void updateStatus(Long id, Integer status);
+
+
+    /**
+     * 获取用户相关信息
+     * @param userId 用户id
+     * @return 结果
+     */
+    Map<String, Object> getUserInfo(Long userId);
 }

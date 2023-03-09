@@ -9,12 +9,15 @@ import com.h.auth.utils.MenuHelper;
 import com.h.model.system.SysMenu;
 import com.h.model.system.SysRoleMenu;
 import com.h.vo.system.AssginMenuVo;
+import com.h.vo.system.MetaVo;
+import com.h.vo.system.RouterVo;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.util.CollectionUtils;
 import org.springframework.util.StringUtils;
 
+import java.util.LinkedList;
 import java.util.List;
 import java.util.stream.Collectors;
 
@@ -89,5 +92,100 @@ public class SysMenuServiceImpl extends ServiceImpl<SysMenuMapper, SysMenu> impl
             sysRoleMenuService.save(menu);
         }
 
+    }
+
+    @Override
+    public List<RouterVo> findUserMenuListByUserId(Long userId) {
+        // 超级管理员admin账号id为：1
+        List<SysMenu> sysMenuList = null;
+        if (userId == 1) {
+            // 获取所有菜单权限
+            sysMenuList = this.list(new LambdaQueryWrapper<SysMenu>().eq(SysMenu::getStatus, 1).orderByAsc(SysMenu::getSortValue));
+        } else {
+            // 获取用户相关菜单权限
+            sysMenuList = baseMapper.findListByUserId(userId);
+        }
+        // 构建树形数据
+        List<SysMenu> sysMenuTreeList = MenuHelper.buildTree(sysMenuList);
+
+        // 构建前端所需数据结构
+        List<RouterVo> routerVoList = this.buildMenus(sysMenuTreeList);
+        return routerVoList;
+    }
+
+    /**
+     * 构建前端所需结构
+     * @param menus 菜单树形结构
+     * @return 结果
+     */
+    private List<RouterVo> buildMenus(List<SysMenu> menus) {
+        List<RouterVo> routers = new LinkedList<>();
+        for (SysMenu menu : menus) {
+            RouterVo router = new RouterVo();
+            // 不隐藏菜单
+            router.setHidden(false);
+            router.setAlwaysShow(false);
+            router.setPath(getRouterPath(menu));
+            router.setComponent(menu.getComponent());
+            router.setMeta(new MetaVo(menu.getName(), menu.getIcon()));
+            List<SysMenu> children = menu.getChildren();
+            // 如果当前是菜单，需将按钮对应的路由加载出来，如：“角色授权”按钮对应的路由在“系统管理”下面
+            if(menu.getType() == 1) {
+                // 获取二级菜单下的所有隐藏菜单 判断component下是否为空
+                List<SysMenu> hiddenMenuList = children
+                        .stream()
+                        .filter(item -> !StringUtils.isEmpty(item.getComponent())).collect(Collectors.toList());
+                for (SysMenu hiddenMenu : hiddenMenuList) {
+                    RouterVo hiddenRouter = new RouterVo();
+                    // 隐藏菜单
+                    hiddenRouter.setHidden(true);
+                    hiddenRouter.setAlwaysShow(false);
+                    hiddenRouter.setPath(getRouterPath(hiddenMenu));
+                    hiddenRouter.setComponent(hiddenMenu.getComponent());
+                    hiddenRouter.setMeta(new MetaVo(hiddenMenu.getName(), hiddenMenu.getIcon()));
+                    routers.add(hiddenRouter);
+                }
+            } else {
+                if (!CollectionUtils.isEmpty(children)) {
+                    if(children.size() > 0) {
+                        router.setAlwaysShow(true);
+                    }
+                    router.setChildren(buildMenus(children));
+                }
+            }
+            routers.add(router);
+        }
+        return routers;
+    }
+
+    /**
+     * 获取路由地址
+     * @param menu 菜单
+     * @return 结果
+     */
+    private String getRouterPath(SysMenu menu) {
+        String routerPath = "/" + menu.getPath();
+        if(menu.getParentId().intValue() != 0) {
+            routerPath = menu.getPath();
+        }
+        return routerPath;
+    }
+
+    @Override
+    public List<String> findUserPermsListByUserId(Long userId) {
+        // 超级管理员admin账号id为：1
+        List<SysMenu> sysMenuList = null;
+        if (userId == 1) {
+            // 获取所有按钮权限
+            sysMenuList = this.list(new LambdaQueryWrapper<SysMenu>().eq(SysMenu::getStatus, 1));
+        } else {
+            // 根据用户id获取按钮权限
+            sysMenuList = baseMapper.findListByUserId(userId);
+        }
+        return sysMenuList
+                .stream()
+                .filter(item -> item.getType() == 2)
+                .map(SysMenu::getPerms)
+                .collect(Collectors.toList());
     }
 }

@@ -20,6 +20,14 @@ public class GlobalExceptionHandler {
         return Result.fail().message("执行了全局异常处理....");
     }
 
+    @ExceptionHandler(ServiceException.class)
+    @ResponseBody
+    public Result error(ServiceException e){
+        e.printStackTrace();
+        return Result.fail().message("执行了ServiceException异常处理....");
+    }
+
+
     @ExceptionHandler(ArithmeticException.class)
     @ResponseBody
     public Result error(ArithmeticException e){
