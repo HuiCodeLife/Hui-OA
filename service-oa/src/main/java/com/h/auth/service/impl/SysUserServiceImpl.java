@@ -1,5 +1,6 @@
 package com.h.auth.service.impl;
 
+import com.baomidou.mybatisplus.core.conditions.query.LambdaQueryWrapper;
 import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
 import com.h.auth.mapper.SysUserMapper;
 import com.h.auth.service.SysMenuService;
@@ -57,5 +58,10 @@ public class SysUserServiceImpl extends ServiceImpl<SysUserMapper, SysUser> impl
         result.put("buttons", permsList);
         result.put("routers", routerVoList);
         return result;
+    }
+
+    @Override
+    public SysUser getByUsername(String username) {
+        return this.getOne(new LambdaQueryWrapper<SysUser>().eq(SysUser::getUsername, username));
     }
 }

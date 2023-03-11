@@ -1,6 +1,8 @@
 package com.h.common.config.exception;
 
 import com.h.common.result.Result;
+import com.h.common.result.ResultCodeEnum;
+import org.springframework.security.access.AccessDeniedException;
 import org.springframework.web.bind.annotation.ControllerAdvice;
 import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.annotation.ResponseBody;
@@ -35,6 +37,16 @@ public class GlobalExceptionHandler {
         return Result.fail().message("执行了ArithmeticException异常....");
     }
 
+    /**
+     * spring security异常
+     * @param e
+     * @return
+     */
+    @ExceptionHandler(AccessDeniedException.class)
+    @ResponseBody
+    public Result error(AccessDeniedException e) throws AccessDeniedException {
+        return Result.build(null, ResultCodeEnum.PERMISSION);
+    }
 
 
 }

@@ -10,6 +10,7 @@ import com.h.vo.system.AssginRoleVo;
 import com.h.vo.system.SysRoleQueryVo;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.util.StringUtils;
 import org.springframework.web.bind.annotation.*;
 
@@ -34,11 +35,12 @@ public class SysRoleController {
      * 查询所有角色
      * @return
      */
+    @PreAuthorize("hasAuthority('bnt.sysRole.list')")
+
     @ApiOperation("查询所有角色")
     @GetMapping("/findAll")
     public Result<List<SysRole>> findAll() {
         List<SysRole> roleList = sysRoleService.list();
-        int i = 1/0;
         return Result.ok(roleList);
     }
 
@@ -49,6 +51,7 @@ public class SysRoleController {
      * @param sysRoleQueryVo 筛选条件
      * @return
      */
+    @PreAuthorize("hasAuthority('bnt.sysRole.list')")
     @ApiOperation("条件分页查询")
     @GetMapping("/{page}/{limit}")
     public Result pageQueryRole(@PathVariable Long page,
@@ -75,6 +78,7 @@ public class SysRoleController {
      * @param id 角色id
      * @return 结果
      */
+    @PreAuthorize("hasAuthority('bnt.sysRole.list')")
     @ApiOperation(value = "获取")
     @GetMapping("/get/{id}")
     public Result get(@PathVariable Long id) {
@@ -87,6 +91,7 @@ public class SysRoleController {
      * @param role 用户信息
      * @return 结果
      */
+    @PreAuthorize("hasAuthority('bnt.sysRole.add')")
     @ApiOperation(value = "新增角色")
     @PostMapping("/save")
     public Result save(@RequestBody SysRole role) {
@@ -99,6 +104,7 @@ public class SysRoleController {
      * @param role 角色
      * @return 结果
      */
+    @PreAuthorize("hasAuthority('bnt.sysRole.update')")
     @ApiOperation(value = "修改角色")
     @PutMapping("/update")
     public Result updateById(@RequestBody SysRole role) {
@@ -111,6 +117,7 @@ public class SysRoleController {
      * @param id 角色id
      * @return 结果
      */
+    @PreAuthorize("hasAuthority('bnt.sysRole.remove')")
     @ApiOperation(value = "删除角色")
     @DeleteMapping("/remove/{id}")
     public Result remove(@PathVariable Long id) {
@@ -123,6 +130,7 @@ public class SysRoleController {
      * @param idList id集合
      * @return 结果
      */
+    @PreAuthorize("hasAuthority('bnt.sysRole.remove')")
     @ApiOperation(value = "根据id列表删除")
     @DeleteMapping("/batchRemove")
     public Result batchRemove(@RequestBody List<Long> idList) {

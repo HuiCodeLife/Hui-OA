@@ -15,6 +15,8 @@ import org.springframework.web.bind.annotation.*;
 import javax.servlet.http.HttpServletRequest;
 import java.util.*;
 
+import static com.h.common.constant.SysConstant.TOKEN_HEAD;
+
 /**
  * 后台登录管理
  *
@@ -39,7 +41,7 @@ public class IndexController {
      *
      * @return
      */
-    @PostMapping("login")
+    @PostMapping("/login")
     public Result login(@RequestBody LoginVo loginVo) {
         String token = loginService.login(loginVo);
         Map<String, Object> map = new HashMap<>(1);
@@ -52,13 +54,12 @@ public class IndexController {
      *
      * @return
      */
-    @GetMapping("info")
+    @GetMapping("/info")
     public Result info(HttpServletRequest request) {
         // 解析请求头中的token获取userId
-        Long userId = JwtHelper.getUserId(request.getHeader("token"));
+        Long userId = JwtHelper.getUserId(request.getHeader(TOKEN_HEAD));
         Map<String, Object> map = sysUserService.getUserInfo(userId);
         return Result.ok(map);
-
     }
 
     /**
@@ -66,7 +67,7 @@ public class IndexController {
      *
      * @return
      */
-    @PostMapping("logout")
+    @PostMapping("/logout")
     public Result logout() {
         return Result.ok();
     }

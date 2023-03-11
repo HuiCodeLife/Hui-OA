@@ -11,6 +11,7 @@ import java.util.List;
  * @since: 2023-03-01
  */
 @Mapper
+
 public interface SysRoleMapper extends BaseMapper<SysRole> {
 
     /**

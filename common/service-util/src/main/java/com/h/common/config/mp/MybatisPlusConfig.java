@@ -14,9 +14,9 @@ import org.springframework.context.annotation.Configuration;
  * @author: Lin
  * @since: 2023-03-01
  */
+
 @Configuration
-@ComponentScan("com.h")
-@MapperScan("com.h.*.mapper")
+@MapperScan(basePackages = {"com.h.auth.mapper","com.h.process.mapper","com.h.wechat.mapper"})
 public class MybatisPlusConfig {
 
     /**

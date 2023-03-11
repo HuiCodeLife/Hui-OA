@@ -13,6 +13,7 @@ import org.apache.ibatis.annotations.Mapper;
  * @since 2023-03-07
  */
 @Mapper
+
 public interface SysRoleMenuMapper extends BaseMapper<SysRoleMenu> {
 
 }
