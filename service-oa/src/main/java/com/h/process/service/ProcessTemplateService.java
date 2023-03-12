@@ -1,5 +1,7 @@
 package com.h.process.service;
 
+import com.baomidou.mybatisplus.core.metadata.IPage;
+import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import com.h.model.process.ProcessTemplate;
 import com.baomidou.mybatisplus.extension.service.IService;
 
@@ -13,4 +15,10 @@ import com.baomidou.mybatisplus.extension.service.IService;
  */
 public interface ProcessTemplateService extends IService<ProcessTemplate> {
 
+    /**
+     * 查询审批流程模板
+     * @param pageParam page
+     * @return 结果
+     */
+    IPage<ProcessTemplate> selectPage(Page<ProcessTemplate> pageParam);
 }
