@@ -11,6 +11,7 @@ import com.h.vo.system.SysUserQueryVo;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.util.StringUtils;
 import org.springframework.web.bind.annotation.*;
 
@@ -38,6 +39,8 @@ public class SysUserController {
      * @return 结果
      */
     @ApiOperation("用户条件分页查询")
+    @PreAuthorize("hasAuthority('bnt.sysUser.list')")
+
     @GetMapping("{page}/{limit}")
     public Result index(@PathVariable Long page,
                         @PathVariable Long limit,
@@ -76,6 +79,7 @@ public class SysUserController {
      * @return 结果
      */
     @ApiOperation(value = "获取用户")
+    @PreAuthorize("hasAuthority('bnt.sysUser.list')")
     @GetMapping("get/{id}")
     public Result get(@PathVariable Long id) {
         SysUser user = sysUserService.getById(id);
@@ -88,6 +92,7 @@ public class SysUserController {
      * @return 结果
      */
     @ApiOperation(value = "保存用户")
+    @PreAuthorize("hasAuthority('bnt.sysUser.add')")
     @PostMapping("save")
     public Result save(@RequestBody SysUser user) {
         sysUserService.save(user);
@@ -99,6 +104,7 @@ public class SysUserController {
      * @param user 用户信息
      * @return 结果
      */
+    @PreAuthorize("hasAuthority('bnt.sysUser.update')")
     @ApiOperation(value = "更新用户")
     @PutMapping("update")
     public Result updateById(@RequestBody SysUser user) {
@@ -112,6 +118,7 @@ public class SysUserController {
      * @return 结果
      */
     @ApiOperation(value = "删除用户")
+    @PreAuthorize("hasAuthority('bnt.sysUser.remove')")
     @DeleteMapping("remove/{id}")
     public Result remove(@PathVariable Long id) {
         sysUserService.removeById(id);
@@ -124,6 +131,7 @@ public class SysUserController {
      * @param status 状态
      * @return 结果
      */
+    @PreAuthorize("hasAuthority('bnt.sysUser.update')")
     @ApiOperation(value = "更新状态")
     @GetMapping("updateStatus/{id}/{status}")
     public Result updateStatus(@PathVariable Long id, @PathVariable Integer status) {

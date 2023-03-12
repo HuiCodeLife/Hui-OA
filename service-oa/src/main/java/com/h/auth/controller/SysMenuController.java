@@ -8,6 +8,7 @@ import com.h.vo.system.AssginMenuVo;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
@@ -34,6 +35,7 @@ public class SysMenuController {
      * @return 结果
      */
     @ApiOperation(value = "获取菜单")
+    @PreAuthorize("hasAuthority('bnt.sysMenu.list')")
     @GetMapping("findNodes")
     public Result findNodes() {
         List<SysMenu> list = sysMenuService.findNodes();
@@ -46,6 +48,7 @@ public class SysMenuController {
      * @return 结果
      */
     @ApiOperation(value = "新增菜单")
+    @PreAuthorize("hasAuthority('bnt.sysMenu.add')")
     @PostMapping("save")
     public Result save(@RequestBody SysMenu sysMenu) {
         sysMenuService.save(sysMenu);
@@ -58,6 +61,8 @@ public class SysMenuController {
      * @return 结果
      */
     @ApiOperation(value = "修改菜单")
+    @PreAuthorize("hasAuthority('bnt.sysMenu.update')")
+
     @PutMapping("update")
     public Result updateById(@RequestBody SysMenu sysMenu) {
         sysMenuService.updateById(sysMenu);
@@ -65,6 +70,8 @@ public class SysMenuController {
     }
 
     @ApiOperation(value = "删除菜单")
+    @PreAuthorize("hasAuthority('bnt.sysMenu.remove')")
+
     @DeleteMapping("remove/{id}")
     public Result remove(@PathVariable Long id) {
         sysMenuService.removeById(id);
@@ -77,6 +84,7 @@ public class SysMenuController {
      * @return 结果
      */
     @ApiOperation(value = "根据角色获取菜单")
+    @PreAuthorize("hasAuthority('bnt.sysMenu.list')")
     @GetMapping("toAssign/{roleId}")
     public Result toAssign(@PathVariable Long roleId) {
         List<SysMenu> list = sysMenuService.findSysMenuByRoleId(roleId);
@@ -89,6 +97,7 @@ public class SysMenuController {
      * @return 结果
      */
     @ApiOperation(value = "给角色分配菜单")
+    @PreAuthorize("hasAuthority('bnt.sysRole.update')")
     @PostMapping("/doAssign")
     public Result doAssign(@RequestBody AssginMenuVo assignMenuVo) {
         sysMenuService.doAssign(assignMenuVo);

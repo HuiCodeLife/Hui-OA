@@ -36,7 +36,6 @@ public class SysRoleController {
      * @return
      */
     @PreAuthorize("hasAuthority('bnt.sysRole.list')")
-
     @ApiOperation("查询所有角色")
     @GetMapping("/findAll")
     public Result<List<SysRole>> findAll() {
@@ -144,6 +143,7 @@ public class SysRoleController {
      * @param userId 用户id
      * @return 结果
      */
+    @PreAuthorize("hasAuthority('bnt.sysRole.list')")
     @ApiOperation(value = "根据用户获取角色数据")
     @GetMapping("/toAssign/{userId}")
     public Result toAssign(@PathVariable Long userId) {
@@ -156,6 +156,7 @@ public class SysRoleController {
      * @param assginRoleVo
      * @return
      */
+    @PreAuthorize("hasAuthority('bnt.sysUser.assignRole')")
     @ApiOperation(value = "用户分配角色")
     @PostMapping("/doAssign")
     public Result doAssign(@RequestBody AssginRoleVo assginRoleVo) {
