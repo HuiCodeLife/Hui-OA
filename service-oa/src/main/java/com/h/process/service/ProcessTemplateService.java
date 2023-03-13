@@ -21,4 +21,10 @@ public interface ProcessTemplateService extends IService<ProcessTemplate> {
      * @return 结果
      */
     IPage<ProcessTemplate> selectPage(Page<ProcessTemplate> pageParam);
+
+    /**
+     * 发布审批模板
+     * @param id 模板id
+     */
+    void publish(Long id);
 }

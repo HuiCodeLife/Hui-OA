@@ -10,7 +10,15 @@ import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.access.prepost.PreAuthorize;
+import org.springframework.util.ResourceUtils;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.multipart.MultipartFile;
+
+import java.io.File;
+import java.io.FileNotFoundException;
+import java.io.IOException;
+import java.util.HashMap;
+import java.util.Map;
 
 /**
  * <p>
@@ -46,6 +54,12 @@ public class ProcessTypeController {
         return Result.ok(processType);
     }
 
+    @ApiOperation(value = "获取全部审批分类")
+    @PreAuthorize("hasAuthority('bnt.processType.list')")
+    @GetMapping("findAll")
+    public Result findAll() {
+        return Result.ok(processTypeService.list());
+    }
     @PreAuthorize("hasAuthority('bnt.processType.add')")
     @ApiOperation(value = "新增")
     @PostMapping("save")

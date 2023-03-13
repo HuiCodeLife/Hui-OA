@@ -70,7 +70,6 @@ public class TokenLoginFilter extends UsernamePasswordAuthenticationFilter {
         //获取当前用户权限数据，放到Redis里面 key：username   value：权限数据
         redisTemplate.opsForValue().set(customUser.getUsername(),
                 JSON.toJSONString(customUser.getAuthorities()));
-
         //返回
         Map<String,Object> map = new HashMap<>();
         map.put("token",token);
