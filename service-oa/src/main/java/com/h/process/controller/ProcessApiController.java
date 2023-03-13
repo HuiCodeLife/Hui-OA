@@ -1,21 +1,18 @@
 package com.h.process.controller;
 
 
-import com.baomidou.mybatisplus.core.metadata.IPage;
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import com.h.common.result.Result;
+import com.h.model.process.Process;
 import com.h.model.process.ProcessTemplate;
 import com.h.process.service.ProcessService;
 import com.h.process.service.ProcessTemplateService;
 import com.h.process.service.ProcessTypeService;
 import com.h.vo.process.ProcessFormVo;
-import com.h.vo.process.ProcessQueryVo;
-import com.h.vo.process.ProcessVo;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
 import io.swagger.annotations.ApiParam;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 
 /**
@@ -58,6 +55,18 @@ public class ProcessApiController {
     public Result start(@RequestBody ProcessFormVo processFormVo) {
         processService.startUp(processFormVo);
         return Result.ok();
+    }
+
+
+    @ApiOperation(value = "待处理")
+    @GetMapping("/findPending/{page}/{limit}")
+    public Result findPending(
+            @ApiParam(name = "page", value = "当前页码", required = true)
+            @PathVariable Long page,
+            @ApiParam(name = "limit", value = "每页记录数", required = true)
+            @PathVariable Long limit) {
+        Page<Process> pageParam = new Page<>(page, limit);
+        return Result.ok(processService.findPending(pageParam));
     }
 }
 

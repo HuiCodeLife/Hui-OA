@@ -42,4 +42,10 @@ public interface ProcessService extends IService<Process> {
      */
     void startUp(ProcessFormVo processFormVo);
 
+    /**
+     * 查找代表任务
+     * @param pageParam 分页数据
+     * @return 结果
+     */
+    IPage<ProcessVo>  findPending(Page<Process> pageParam);
 }

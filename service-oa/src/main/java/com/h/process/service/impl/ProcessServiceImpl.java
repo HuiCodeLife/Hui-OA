@@ -23,6 +23,7 @@ import org.activiti.engine.TaskService;
 import org.activiti.engine.repository.Deployment;
 import org.activiti.engine.runtime.ProcessInstance;
 import org.activiti.engine.task.Task;
+import org.activiti.engine.task.TaskQuery;
 import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -147,6 +148,46 @@ public class ProcessServiceImpl extends ServiceImpl<ProcessMapper, Process> impl
 
         //记录操作行为
         processRecordService.record(process.getId(), 1, "发起申请");
+    }
+
+    @Override
+    public IPage<ProcessVo> findPending(Page<Process> pageParam) {
+        // 根据当前用户查询
+        TaskQuery query = taskService.createTaskQuery().taskAssignee(LoginUserInfoHelper.getUsername()).orderByTaskCreateTime().desc();
+        // 任务列表
+        List<Task> list = query.listPage((int) ((pageParam.getCurrent() - 1) * pageParam.getSize()), (int) pageParam.getSize());
+        // 任务总数
+        long totalCount = query.count();
+        List<ProcessVo> processList = new ArrayList<>();
+        // 遍历->将Task转为ProcessVo
+        for (Task item : list) {
+            // 获取任务的实例id
+            String processInstanceId = item.getProcessInstanceId();
+            // 根据任务的实例id获取任务实例
+            ProcessInstance processInstance = runtimeService
+                    .createProcessInstanceQuery()
+                    .processInstanceId(processInstanceId)
+                    .singleResult();
+            if (processInstance == null) {
+                continue;
+            }
+            // 获取业务key
+            String businessKey = processInstance.getBusinessKey();
+            if (businessKey == null) {
+                continue;
+            }
+            // 根据业务key获取流程信息
+            Process process = this.getById(Long.parseLong(businessKey));
+            ProcessVo processVo = new ProcessVo();
+            BeanUtils.copyProperties(process, processVo);
+            processVo.setTaskId(item.getId());
+            // 添加到任务列表
+            processList.add(processVo);
+        }
+        // 封装page分页对象
+        IPage<ProcessVo> page = new Page<>(pageParam.getCurrent(), pageParam.getSize(), totalCount);
+        page.setRecords(processList);
+        return page;
     }
 
     private List<Task> getCurrentTaskList(String processInstanceId) {
