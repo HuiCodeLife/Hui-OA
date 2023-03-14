@@ -2,6 +2,9 @@ package com.h.wechat.service;
 
 import com.h.model.wechat.Menu;
 import com.baomidou.mybatisplus.extension.service.IService;
+import com.h.vo.wechat.MenuVo;
+
+import java.util.List;
 
 /**
  * <p>
@@ -13,4 +16,9 @@ import com.baomidou.mybatisplus.extension.service.IService;
  */
 public interface MenuService extends IService<Menu> {
 
+    /**
+     * 查询所有菜单列表
+     * @return 结果
+     */
+    List<MenuVo> findMenuInfo();
 }

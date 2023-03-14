@@ -1,9 +1,16 @@
 package com.h.wechat.controller;
 
 
-import org.springframework.web.bind.annotation.RequestMapping;
+import com.h.common.result.Result;
+import com.h.model.wechat.Menu;
+import com.h.vo.wechat.MenuVo;
+import com.h.wechat.service.MenuService;
+import io.swagger.annotations.Api;
+import io.swagger.annotations.ApiOperation;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.web.bind.annotation.*;
 
-import org.springframework.web.bind.annotation.RestController;
+import java.util.List;
 
 /**
  * <p>
@@ -13,9 +20,52 @@ import org.springframework.web.bind.annotation.RestController;
  * @author Lin
  * @since 2023-03-14
  */
+@Api(tags = "微信公众号管理")
 @RestController
-@RequestMapping("/wechat/menu")
+@RequestMapping("/admin/wechat/menu")
 public class MenuController {
 
+    @Autowired
+    private MenuService menuService;
+
+    //@PreAuthorize("hasAuthority('bnt.menu.list')")
+    @ApiOperation(value = "获取")
+    @GetMapping("get/{id}")
+    public Result get(@PathVariable Long id) {
+        Menu menu = menuService.getById(id);
+        return Result.ok(menu);
+    }
+
+    //@PreAuthorize("hasAuthority('bnt.menu.add')")
+    @ApiOperation(value = "新增")
+    @PostMapping("save")
+    public Result save(@RequestBody Menu menu) {
+        menuService.save(menu);
+        return Result.ok();
+    }
+
+    //@PreAuthorize("hasAuthority('bnt.menu.update')")
+    @ApiOperation(value = "修改")
+    @PutMapping("update")
+    public Result updateById(@RequestBody Menu menu) {
+        menuService.updateById(menu);
+        return Result.ok();
+    }
+
+    //@PreAuthorize("hasAuthority('bnt.menu.remove')")
+    @ApiOperation(value = "删除")
+    @DeleteMapping("remove/{id}")
+    public Result remove(@PathVariable Long id) {
+        menuService.removeById(id);
+        return Result.ok();
+    }
+
+    //@PreAuthorize("hasAuthority('bnt.menu.list')")
+    @ApiOperation(value = "获取全部菜单")
+    @GetMapping("findMenuInfo")
+    public Result findMenuInfo() {
+        List<MenuVo> menuVoList = menuService.findMenuInfo();
+        return Result.ok(menuVoList);
+    }
 }
 
