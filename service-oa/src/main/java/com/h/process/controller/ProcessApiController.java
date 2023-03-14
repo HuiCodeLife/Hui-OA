@@ -8,7 +8,9 @@ import com.h.model.process.ProcessTemplate;
 import com.h.process.service.ProcessService;
 import com.h.process.service.ProcessTemplateService;
 import com.h.process.service.ProcessTypeService;
+import com.h.vo.process.ApprovalVo;
 import com.h.vo.process.ProcessFormVo;
+import com.h.vo.process.ProcessVo;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
 import io.swagger.annotations.ApiParam;
@@ -68,5 +70,41 @@ public class ProcessApiController {
         Page<Process> pageParam = new Page<>(page, limit);
         return Result.ok(processService.findPending(pageParam));
     }
+
+    @ApiOperation(value = "获取审批详情")
+    @GetMapping("show/{id}")
+    public Result show(@PathVariable Long id) {
+        return Result.ok(processService.show(id));
+    }
+
+    @ApiOperation(value = "审批")
+    @PostMapping("approve")
+    public Result approve(@RequestBody ApprovalVo approvalVo) {
+        processService.approve(approvalVo);
+        return Result.ok();
+    }
+
+    @ApiOperation(value = "已处理")
+    @GetMapping("/findProcessed/{page}/{limit}")
+    public Result findProcessed(
+            @ApiParam(name = "page", value = "当前页码", required = true)
+            @PathVariable Long page,
+            @ApiParam(name = "limit", value = "每页记录数", required = true)
+            @PathVariable Long limit) {
+        Page<Process> pageParam = new Page<>(page, limit);
+        return Result.ok(processService.findProcessed(pageParam));
+    }
+
+    @ApiOperation(value = "已发起")
+    @GetMapping("/findStarted/{page}/{limit}")
+    public Result findStarted(
+            @ApiParam(name = "page", value = "当前页码", required = true)
+            @PathVariable Long page,
+            @ApiParam(name = "limit", value = "每页记录数", required = true)
+            @PathVariable Long limit) {
+        Page<ProcessVo> pageParam = new Page<>(page, limit);
+        return Result.ok(processService.findStarted(pageParam));
+    }
+
 }
 

@@ -26,10 +26,19 @@ import org.springframework.web.bind.annotation.*;
 @Api(tags = "用户管理接口")
 @RestController
 @RequestMapping("/admin/system/sysUser")
+@CrossOrigin
+
 public class SysUserController {
 
     @Autowired
     private SysUserService sysUserService;
+
+
+    @ApiOperation(value = "获取当前用户基本信息")
+    @GetMapping("getCurrentUser")
+    public Result getCurrentUser() {
+        return Result.ok(sysUserService.getCurrentUser());
+    }
 
     /**
      * 用户条件分页查询
@@ -40,7 +49,6 @@ public class SysUserController {
      */
     @ApiOperation("用户条件分页查询")
     @PreAuthorize("hasAuthority('bnt.sysUser.list')")
-
     @GetMapping("{page}/{limit}")
     public Result index(@PathVariable Long page,
                         @PathVariable Long limit,

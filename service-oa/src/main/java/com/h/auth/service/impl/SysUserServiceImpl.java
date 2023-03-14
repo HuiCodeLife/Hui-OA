@@ -8,6 +8,7 @@ import com.h.auth.service.SysUserService;
 import com.h.common.result.Result;
 import com.h.common.utils.JwtHelper;
 import com.h.model.system.SysUser;
+import com.h.security.custom.LoginUserInfoHelper;
 import com.h.vo.system.RouterVo;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -30,6 +31,10 @@ public class SysUserServiceImpl extends ServiceImpl<SysUserMapper, SysUser> impl
 
     @Autowired
     private SysMenuService sysMenuService;
+
+
+    @Autowired
+    private SysUserService sysUserService;
     @Override
     public void updateStatus(Long id, Integer status) {
         SysUser sysUser = this.getById(id);
@@ -63,5 +68,14 @@ public class SysUserServiceImpl extends ServiceImpl<SysUserMapper, SysUser> impl
     @Override
     public SysUser getByUsername(String username) {
         return this.getOne(new LambdaQueryWrapper<SysUser>().eq(SysUser::getUsername, username));
+    }
+
+    @Override
+    public Map<String, Object> getCurrentUser() {
+        SysUser sysUser = sysUserService.getById(LoginUserInfoHelper.getUserId());
+        Map<String, Object> map = new HashMap<>(2);
+        map.put("name", sysUser.getName());
+        map.put("phone", sysUser.getPhone());
+        return map;
     }
 }
