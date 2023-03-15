@@ -21,4 +21,16 @@ public interface MenuService extends IService<Menu> {
      * @return 结果
      */
     List<MenuVo> findMenuInfo();
+
+
+    /**
+     * 同步菜单到微信公众号
+     */
+    public void syncMenu();
+
+
+    /**
+     * 删除菜单
+     */
+    void removeMenu();
 }

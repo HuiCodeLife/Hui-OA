@@ -8,6 +8,7 @@ import com.h.wechat.service.MenuService;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
@@ -66,6 +67,22 @@ public class MenuController {
     public Result findMenuInfo() {
         List<MenuVo> menuVoList = menuService.findMenuInfo();
         return Result.ok(menuVoList);
+    }
+
+//    @PreAuthorize("hasAuthority('bnt.menu.syncMenu')")
+    @ApiOperation(value = "同步菜单")
+    @GetMapping("syncMenu")
+    public Result createMenu() {
+        menuService.syncMenu();
+        return Result.ok();
+    }
+
+//    @PreAuthorize("hasAuthority('bnt.menu.removeMenu')")
+    @ApiOperation(value = "删除菜单")
+    @DeleteMapping("removeMenu")
+    public Result removeMenu() {
+        menuService.removeMenu();
+        return Result.ok();
     }
 }
 

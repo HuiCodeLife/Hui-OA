@@ -69,7 +69,6 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
         // 指定UserDetailService和加密器
         auth.userDetailsService(userDetailsService).passwordEncoder(customMd5PasswordEncoder);
     }
-
     /**
      * 配置哪些请求不拦截
      * 排除swagger相关请求
