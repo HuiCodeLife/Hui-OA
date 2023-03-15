@@ -45,8 +45,8 @@ spring:
     check-process-definitions: true
 # 微信公众号测试接口
 wechat:
-  mpAppId: wx7304844d3c993b2f
-  mpAppSecret: 58d028e3622ff2037efc6698e86cdb60
+  mpAppId: #你的mpAppId
+  mpAppSecret: #你的mpAppSecret
   # 授权回调获取用户信息接口地址
 #  userInfoUrl: http://huicode.free.idcfengye.com/admin/wechat/userInfo
   userInfoUrl: http://ggkt2.vipgz1.91tunnel.com/admin/wechat/userInfo
