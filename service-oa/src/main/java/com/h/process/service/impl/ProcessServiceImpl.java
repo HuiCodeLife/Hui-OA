@@ -20,6 +20,7 @@ import com.h.vo.process.ApprovalVo;
 import com.h.vo.process.ProcessFormVo;
 import com.h.vo.process.ProcessQueryVo;
 import com.h.vo.process.ProcessVo;
+import com.h.wechat.service.MessageService;
 import org.activiti.bpmn.model.BpmnModel;
 import org.activiti.bpmn.model.EndEvent;
 import org.activiti.bpmn.model.FlowNode;
@@ -79,6 +80,10 @@ public class ProcessServiceImpl extends ServiceImpl<ProcessMapper, Process> impl
 
     @Autowired
     private HistoryService historyService;
+
+
+    @Autowired
+    private MessageService messageService;
 
 
     @Override
@@ -167,7 +172,8 @@ public class ProcessServiceImpl extends ServiceImpl<ProcessMapper, Process> impl
                 SysUser user = sysUserService.getByUsername(task.getAssignee());
                 // 添加到下一个审批人列表
                 assigneeList.add(user.getName());
-                //TODO 推送消息给下一个审批人
+                //推送消息给下一个审批人
+                messageService.pushPendingMessage(process.getId(), user.getId(), task.getId());
             }
             // 设置详细信息
             process.setDescription("等待" + StringUtils.join(assigneeList.toArray(), ",") + "审批");
@@ -266,7 +272,6 @@ public class ProcessServiceImpl extends ServiceImpl<ProcessMapper, Process> impl
         String description = approvalVo.getStatus() == 1 ? "已通过" : "驳回";
         // 流程记录
         processRecordService.record(approvalVo.getProcessId(), approvalVo.getStatus(), description);
-
         Process process = this.getById(approvalVo.getProcessId());
         // 设置一个流程负责人
         boolean taskIsEmpty = setNextAssignee(process);
@@ -283,8 +288,8 @@ public class ProcessServiceImpl extends ServiceImpl<ProcessMapper, Process> impl
                 process.setStatus(-1);
             }
         }
-        // TODO 推送消息给申请人
-
+        // 推送消息给申请人
+        messageService.pushProcessedMessage(process.getId(), process.getUserId(), approvalVo.getStatus());
         // 修改流程状态
         this.updateById(process);
     }

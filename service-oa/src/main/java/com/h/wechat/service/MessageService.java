@@ -19,7 +19,7 @@ public interface MessageService {
      * 审批后推送提交审批人员
      * @param processId 流程id
      * @param userId 推送者id
-     * @param status
+     * @param status 状态
      */
     void pushProcessedMessage(Long processId, Long userId, Integer status);
 }
